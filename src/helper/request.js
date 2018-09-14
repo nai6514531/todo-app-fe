@@ -1,9 +1,17 @@
 import axios from 'axios';
 // axios.defaults.headers.common['Content-Type'] = 'application/json'
 // axios.defaults.headers.common['Accept'] = 'application/json'
-
+const API_SERVER = '/api';
+const api = axios.create({
+  baseURL: API_SERVER,
+  headers: {
+    'Content-Type': 'application/json',
+    HTTP_X_REQUESTED_WITH: 'XMLHttpRequest',
+  },
+  timeout: 1000 * 10 * 2,
+});
 // Add a request interceptor
-axios.interceptors.request.use(
+api.interceptors.request.use(
   config =>
   // Do something before request is sent
     config
@@ -13,7 +21,7 @@ axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-axios.interceptors.response.use((res) => {
+api.interceptors.response.use((res) => {
   if (res.status === 200 && res.statusText === 'OK') {
     return res.data;
   }
@@ -28,4 +36,4 @@ axios.interceptors.response.use((res) => {
   return Promise.reject(new Error(error.statusText));
 });
 
-export default axios;
+export default api;
